@@ -10,10 +10,10 @@ const serieSchema = new Schema({
   episodes: [{ type: Schema.Types.ObjectId, ref: 'Episode' }],
 })
 
-serieSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
-  object.id = _id
-  return object
-})
+// serieSchema.method('toJSON', function () {
+//   const { __v, _id, ...object } = this.toObject()
+//   object.id = _id
+//   return object
+// })
 
 module.exports = mongoose.model('Serie', serieSchema)

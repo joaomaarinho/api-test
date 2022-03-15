@@ -14,10 +14,10 @@ const movieSchema = new Schema({
   },
 })
 
-movieSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
-  object.id = _id
-  return object
-})
+// movieSchema.method('toJSON', function () {
+//   const { __v, _id, ...object } = this.toObject()
+//   object.id = _id
+//   return object
+// })
 
 module.exports = mongoose.model('Movie', movieSchema)
