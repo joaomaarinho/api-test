@@ -8,12 +8,14 @@ const { createUserError } = require('../middleware')
 module.exports.showAllUsers = async (req, res) => {
   const users = await User.find({})
 
-  const userMap = {}
-  users.forEach((user) => {
-    userMap[user._id] = user
-  })
+  console.log(users)
 
-  res.send(users)
+  // const userMap = {}
+  // users.forEach((user) => {
+  //   userMap[user._id] = user
+  // })
+
+  // res.send(users)
   // await User.find()
   //   .then((data) => {
   //     res.send(data)

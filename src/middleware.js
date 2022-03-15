@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken')
-const { findOne } = require('./models/user')
 const User = require('./models/user')
 
 module.exports.refreshToken = (req, res, next) => {}
 
 module.exports.verifyToken = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1]
+  const headerToken = req.headers.authorization
 
-  if (!token) {
+  if (!headerToken) {
     return res.status(403).send('A token is required!')
   }
+
+  const token = headerToken.split(' ')[1]
 
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY)
