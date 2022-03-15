@@ -1,59 +1,87 @@
-const jwt = require("jsonwebtoken");
-const { findOne } = require("./models/user");
-const User = require("./models/user");
+const jwt = require('jsonwebtoken')
+const { findOne } = require('./models/user')
+const User = require('./models/user')
+
+module.exports.refreshToken = (req, res, next) => {}
 
 module.exports.verifyToken = (req, res, next) => {
-  const token = req.headers["x-access-token"];
+  const token = req.headers.authorization.split(' ')[1]
 
   if (!token) {
-    return res.status(403).send("A token is required!");
+    return res.status(403).send('A token is required!')
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.TOKEN_KEY)
+    req.user = decoded
+    return next()
   } catch (error) {
     //redirect to login page
-    return res.status(401).send("Invalid token!");
+    return res.status(401).send('Invalid token!')
   }
-  return next();
-};
+}
 
 module.exports.createUserError = (err) => {
-  console.log(err.message, err.code);
-  let errors = { first_name: "", last_name: "", email: "", password: "" };
-
-  if (err.message.includes("user validation failed")) {
-    Object.values(err.errors).forEach(({ properties }) => {
-      errors[properties.path] = properties.message;
-    });
+  console.log(err.message, err.code)
+  let errors = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
   }
 
-  return errors;
-};
+  if (err.message.includes('user validation failed')) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message
+    })
+  }
+
+  return errors
+}
+module.exports.createMovieError = (err) => {
+  console.log(err.message, err.code)
+  let errors = {
+    name: '',
+    released_year: '',
+    synopsis: '',
+    genre: '',
+  }
+
+  if (err.message.includes('movie validation failed')) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message
+    })
+  }
+
+  return errors
+}
 
 //admin only requests
 module.exports.isAdmin = (req, res, next) => {
-  const token = req.headers["x-access-token"];
+  const token = req.headers.authorization.split(' ')[1]
 
-  const decoded = jwt.decode(token, { complete: true });
+  const decoded = jwt.decode(token, {
+    complete: true,
+  })
   if (!decoded.payload.isAdmin) {
-    res.send("You are not allowed to see this request");
+    res.send('You are not allowed to see this request')
   } else {
-    next();
+    next()
   }
-};
+}
 
 //requests for logged user or admin
 module.exports.isUser = (req, res, next) => {
-  const token = req.headers["x-access-token"];
+  const token = req.headers.authorization.split(' ')[1]
 
-  const userId = req.params.id;
+  const userId = req.params.id
 
-  const decodedToken = jwt.decode(token, { complete: true });
+  const decodedToken = jwt.decode(token, {
+    complete: true,
+  })
   if (decodedToken.payload.user_id === userId || decodedToken.payload.isAdmin) {
-    next();
+    next()
   } else {
-    res.send("You are not allowed to do this");
+    res.send('You are not allowed to do this!')
   }
-};
+}
