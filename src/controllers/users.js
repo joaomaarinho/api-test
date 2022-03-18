@@ -1,28 +1,15 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs/dist/bcrypt')
+const { toJSON } = require('flatted')
 
 const User = require('../models/user')
 const { createUserError } = require('../middleware')
 
 module.exports.showAllUsers = async (req, res) => {
-  const users = await User.find({})
+  const users = await User.find()
 
-  console.log(users)
-
-  // const userMap = {}
-  // users.forEach((user) => {
-  //   userMap[user._id] = user
-  // })
-
-  // res.send(users)
-  // await User.find()
-  //   .then((data) => {
-  //     res.send(data)
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send({ message: err.message || 'Some error occurred' })
-  //   })
+  res.json(users)
 }
 
 module.exports.createUser = async (req, res) => {
@@ -62,12 +49,9 @@ module.exports.createUser = async (req, res) => {
         expiresIn: '3h',
       },
     )
-
     user.token = token
-    await user.save()
 
-    res.status(201).json(user)
-    res.header('Authorization', token)
+    res.header('Authorization', token).status(201).send(user)
   } catch (err) {
     console.log(err)
     res.status(400).json(createUserError(err))
@@ -98,9 +82,12 @@ module.exports.loginUser = async (req, res) => {
           expiresIn: '3h',
         },
       )
-
       user.token = token
-      res.header('Authorization', token)
+
+      if (!req.headers.authorization) {
+        res.header('Authorization', token)
+      }
+
       res.status(201).json(user)
     }
 
@@ -111,7 +98,7 @@ module.exports.loginUser = async (req, res) => {
 }
 
 module.exports.logoutUser = (req, res) => {
-  //logout function jwt
+  res.header('Authorization', '')
   // delete header.authorization
 }
 

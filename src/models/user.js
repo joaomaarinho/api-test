@@ -28,14 +28,6 @@ const userSchema = new Schema({
   },
   token: { type: String },
   admin: { type: Boolean, default: false },
-  movies: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
-  series: [{ type: Schema.Types.ObjectId, ref: 'Serie' }],
 })
-
-// userSchema.method('toJSON', function () {
-//   const { __v, _id, ...object } = this.toObject()
-//   object.id = _id
-//   return object
-// })
 
 module.exports = mongoose.model('User', userSchema)

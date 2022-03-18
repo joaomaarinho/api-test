@@ -73,9 +73,11 @@ module.exports.isAdmin = (req, res, next) => {
 
 //requests for logged user or admin
 module.exports.isUser = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1]
+  const headerToken = req.headers.authorization
 
   const userId = req.params.id
+
+  const token = headerToken.split(' ')[1]
 
   const decodedToken = jwt.decode(token, {
     complete: true,
