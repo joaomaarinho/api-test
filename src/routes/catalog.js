@@ -11,9 +11,9 @@ const {
 const catchAsync = require('../utils/catchAsync')
 const { verifyToken, isAdmin } = require('../middleware')
 
-router.route('/register-movie').post(verifyToken, catchAsync(createMovie))
-
 router.route('/catalogo').get(verifyToken, catchAsync(showAllContent))
+
+router.route('/register-movie').post(verifyToken, catchAsync(createMovie))
 
 router
   .route('/catalog/:id')
