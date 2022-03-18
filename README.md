@@ -1,5 +1,14 @@
 ## Movies API documentation
 
+_for this project to work it is necessary to provide some key values in the .env file (if running locally)_
+
+| Parameter           | Type     | Description                                         |
+| :------------------ | :------- | :-------------------------------------------------- |
+| `API_PORT`          | `string` | **Required**. Port where the API will run           |
+| `TOKEN_KEY`         | `string` | **Required**. key to validate the jwt token         |
+| `REFRESH_TOKEN_KEY` | `string` | **Required**. key to validate the jwt refresh token |
+| `DB_URL`            | `string` | **Required**. Atlas MongoDB url                     |
+
 ## Users Requests
 
 ```http
